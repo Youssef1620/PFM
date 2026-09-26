@@ -18,15 +18,15 @@ const clearAllBtn = document.getElementById('clear-all-btn');
 const monthTotalEl = document.getElementById('month-total');
 const topCategoryEl = document.getElementById('top-category');
 const budgetBar = document.getElementById('budget-bar');
-const BUDGET_LIMIT = 5000;
+const dynamicBudgetLimitEl = document.getElementById('dynamic-budget-limit');
 
-// متغيرات خطط الشراء
+// خطط الشراء
 const planTitle = document.getElementById('plan-title');
 const planPrice = document.getElementById('plan-price');
 const addPlanForm = document.getElementById('add-plan-form');
 const plansList = document.getElementById('plans-list');
 
-// متغيرات المستشار المالي والتخطيط
+// المستشار المالي
 const plannerIncomeInput = document.getElementById('planner-income');
 const updatePlannerBtn = document.getElementById('update-planner-btn');
 const plannerDisplayIncome = document.getElementById('planner-display-income');
@@ -39,7 +39,7 @@ const customSavePercent = document.getElementById('custom-save-percent');
 const customSaveAmount = document.getElementById('custom-save-amount');
 const customSpendAmount = document.getElementById('custom-spend-amount');
 
-// متغيرات الحصالة وسجل المدخرات
+// الحصالة والمدخرات
 const addSavingForm = document.getElementById('add-saving-form');
 const saveAmountInput = document.getElementById('save-amount');
 const saveNoteInput = document.getElementById('save-note');
@@ -62,16 +62,19 @@ const clearAllTimeBtn = document.getElementById('clear-all-time-btn');
 const searchExpenses = document.getElementById('search-expenses');
 
 // ==========================================
-// 2. جلب البيانات من LocalStorage
+// 2. LocalStorage (حفظ نسبة التحويش والدخل)
 // ==========================================
 let expenses = JSON.parse(localStorage.getItem('my_expenses')) || [];
-let budgetData = JSON.parse(localStorage.getItem('my_budget_data')) || { income: 0 };
+let budgetData = JSON.parse(localStorage.getItem('my_budget_data')) || {};
+if (typeof budgetData.income === 'undefined') budgetData.income = 0;
+if (typeof budgetData.savePercent === 'undefined') budgetData.savePercent = 20;
+
 let buyPlans = JSON.parse(localStorage.getItem('my_buy_plans')) || [];
 let savingsData = JSON.parse(localStorage.getItem('my_savings_data')) || { annual: 0 };
 let savingsLog = JSON.parse(localStorage.getItem('my_savings_log')) || [];
 
 // ==========================================
-// 3. تهيئة الرسومات البيانية (Chart.js)
+// 3. Chart.js
 // ==========================================
 Chart.defaults.color = '#fff';
 
@@ -80,11 +83,7 @@ let weeklyChart = new Chart(ctxWeek, {
     type: 'doughnut',
     data: {
         labels: ['أكل وشرب', 'مواصلات', 'ترفيه', 'مشتريات', 'أخرى'],
-        datasets: [{
-            data: [0, 0, 0, 0, 0],
-            backgroundColor: ['#10b981', '#3b82f6', '#f59e0b', '#8b5cf6', '#64748b'],
-            borderWidth: 0
-        }]
+        datasets: [{ data: [0, 0, 0, 0, 0], backgroundColor: ['#10b981', '#3b82f6', '#f59e0b', '#8b5cf6', '#64748b'], borderWidth: 0 }]
     },
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
 });
@@ -99,23 +98,18 @@ let monthlyChart = new Chart(ctxMonth, {
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
 });
 
-// الرسم البياني الخاص بالمستشار المالي (التوزيع)
 const ctxPlanner = document.getElementById('plannerChart').getContext('2d');
 let plannerChart = new Chart(ctxPlanner, {
     type: 'doughnut',
     data: {
         labels: ['مصروفات مخططة', 'تحويش'],
-        datasets: [{
-            data: [80, 20],
-            backgroundColor: ['#ef4444', '#10b981'],
-            borderWidth: 0
-        }]
+        datasets: [{ data: [80, 20], backgroundColor: ['#ef4444', '#10b981'], borderWidth: 0 }]
     },
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
 });
 
 // ==========================================
-// 4. الدالة الشاملة (البحث وتحديث الواجهة)
+// 4. الدوال الرئيسية
 // ==========================================
 function renderAllExpenses(searchTerm = '') {
     if (!allExpensesList) return;
@@ -126,7 +120,6 @@ function renderAllExpenses(searchTerm = '') {
     sortedExpenses.forEach((item) => {
         const originalIndex = expenses.indexOf(item);
         const searchLower = searchTerm.toLowerCase();
-        
         if (searchTerm && !item.title.toLowerCase().includes(searchLower) && !item.category.toLowerCase().includes(searchLower)) return;
 
         total += item.amount; count++;
@@ -149,20 +142,39 @@ function renderAllExpenses(searchTerm = '') {
     if (allTimeCountEl) allTimeCountEl.textContent = count;
 }
 
+function updatePlannerChart(savePercent, totalIncome) {
+    const saveAmt = (totalIncome * (savePercent / 100)).toFixed(1);
+    const spendAmt = (totalIncome - saveAmt).toFixed(1);
+
+    if (customSavePercent) customSavePercent.textContent = savePercent + '%';
+    if (customSaveAmount) customSaveAmount.textContent = saveAmt;
+    if (customSpendAmount) customSpendAmount.textContent = spendAmt;
+
+    if (plannerChart) {
+        plannerChart.data.datasets[0].data = [spendAmt, saveAmt];
+        plannerChart.update();
+    }
+}
+
 function updateUI() {
     const currentIncome = budgetData.income || 0;
+    const savePercent = budgetData.savePercent || 20;
+    const spendLimit = currentIncome * ((100 - savePercent) / 100);
     
-    // تحديث قسم المستشار المالي
+    // تحديث الحد الأقصى في سكشن 112
+    if(dynamicBudgetLimitEl) dynamicBudgetLimitEl.textContent = spendLimit.toFixed(0);
+
+    // تحديث المستشار المالي
     if(plannerDisplayIncome) plannerDisplayIncome.textContent = currentIncome;
     if(plannerIncomeInput && !plannerIncomeInput.value) plannerIncomeInput.value = currentIncome;
+    if(customSaveRange) customSaveRange.value = savePercent;
     
     if(recSpend) recSpend.textContent = (currentIncome * 0.8).toFixed(1);
     if(recSave) recSave.textContent = (currentIncome * 0.2).toFixed(1);
     if(recInvest) recInvest.textContent = (currentIncome * 0.1).toFixed(1);
 
-    updatePlannerChart(customSaveRange ? customSaveRange.value : 20, currentIncome);
+    updatePlannerChart(savePercent, currentIncome);
 
-    // قسم التحويش السنوي
     const annualIncome = currentIncome * 12;
     if(displayAnnualIncome) displayAnnualIncome.textContent = annualIncome;
     if(reqMonthlySave) reqMonthlySave.textContent = (savingsData.annual / 12).toFixed(1);
@@ -171,7 +183,6 @@ function updateUI() {
         annualSaveTargetInput.value = savingsData.annual;
     }
 
-    // حساب المصروفات للأسبوع والشهر
     todayList.innerHTML = '';
     const now = new Date(), currentMonth = now.getMonth(), currentYear = now.getFullYear();
     const dayOfWeek = now.getDay(), diffToSaturday = dayOfWeek === 6 ? 0 : dayOfWeek + 1;
@@ -217,8 +228,9 @@ function updateUI() {
     for (let cat in catTotalsMonth) { if (catTotalsMonth[cat] > maxVal) { maxVal = catTotalsMonth[cat]; maxCat = cat; } }
     if(topCategoryEl) topCategoryEl.textContent = maxCat;
 
+    // تحديث شريط الميزانية بناءً على الحد الأقصى الديناميكي
     if(budgetBar) {
-        let budgetPercent = (monthTotal / BUDGET_LIMIT) * 100;
+        let budgetPercent = spendLimit > 0 ? (monthTotal / spendLimit) * 100 : (monthTotal > 0 ? 100 : 0);
         budgetBar.style.width = Math.min(budgetPercent, 100) + '%';
         budgetBar.style.backgroundColor = budgetPercent > 85 ? '#ef4444' : '#117c43';
     }
@@ -230,7 +242,6 @@ function updateUI() {
 
     localStorage.setItem('my_expenses', JSON.stringify(expenses));
 
-    // خطط الشراء
     if(plansList) {
         plansList.innerHTML = '';
         buyPlans.forEach((plan, index) => {
@@ -264,7 +275,6 @@ function updateUI() {
         });
     }
 
-    // سجل المدخرات (الحصالة)
     let mSavedTotal = 0, ySavedTotal = 0, allSavedTotal = 0;
     if(monthSavingsList) monthSavingsList.innerHTML = '';
     if(yearSavingsList) yearSavingsList.innerHTML = '';
@@ -305,21 +315,46 @@ function updateUI() {
     renderAllExpenses(searchExpenses ? searchExpenses.value : '');
 }
 
-function updatePlannerChart(savePercent, totalIncome) {
-    const saveAmt = (totalIncome * (savePercent / 100)).toFixed(1);
-    const spendAmt = (totalIncome - saveAmt).toFixed(1);
+// ==========================================
+// 5. أحداث التفاعل الحي (Live Updates)
+// ==========================================
 
-    if (customSavePercent) customSavePercent.textContent = savePercent + '%';
-    if (customSaveAmount) customSaveAmount.textContent = saveAmt;
-    if (customSpendAmount) customSpendAmount.textContent = spendAmt;
-
-    plannerChart.data.datasets[0].data = [spendAmt, saveAmt];
-    plannerChart.update();
+// التحديث اللحظي عند إدخال رقم الدخل بدون ضغط أزرار
+if (plannerIncomeInput) {
+    plannerIncomeInput.addEventListener('input', (e) => {
+        const tempIncome = parseFloat(e.target.value) || 0;
+        const tempSavePercent = customSaveRange ? parseFloat(customSaveRange.value) : 20;
+        updatePlannerChart(tempSavePercent, tempIncome);
+    });
 }
 
+// التحديث اللحظي عند سحب شريط التحويش وتأثيره المباشر على الحد الأقصى للمصاريف (سكشن 112)
 if (customSaveRange) {
     customSaveRange.addEventListener('input', (e) => {
-        updatePlannerChart(e.target.value, budgetData.income || 0);
+        const val = parseFloat(e.target.value);
+        const inc = budgetData.income || 0;
+        const spendLimit = inc * ((100 - val) / 100);
+        
+        // 1. تحديث شكل المخطط والنصوص فوراً
+        updatePlannerChart(val, inc);
+        
+        // 2. تحديث الحد الأقصى في سكشن 112 فوراً
+        if (dynamicBudgetLimitEl) dynamicBudgetLimitEl.textContent = spendLimit.toFixed(0);
+        
+        // 3. تحديث شريط الميزانية (البار) فوراً
+        const monthTotal = parseFloat(monthTotalEl.textContent) || 0;
+        if(budgetBar) {
+            let budgetPercent = spendLimit > 0 ? (monthTotal / spendLimit) * 100 : (monthTotal > 0 ? 100 : 0);
+            budgetBar.style.width = Math.min(budgetPercent, 100) + '%';
+            budgetBar.style.backgroundColor = budgetPercent > 85 ? '#ef4444' : '#117c43';
+        }
+    });
+
+    // حفظ التعديل النهائي للشريط في قاعدة البيانات
+    customSaveRange.addEventListener('change', (e) => {
+        budgetData.savePercent = parseFloat(e.target.value);
+        localStorage.setItem('my_budget_data', JSON.stringify(budgetData));
+        updateUI(); 
     });
 }
 
@@ -327,13 +362,16 @@ if (updatePlannerBtn) {
     updatePlannerBtn.addEventListener('click', () => {
         budgetData.income = parseFloat(plannerIncomeInput.value) || 0;
         localStorage.setItem('my_budget_data', JSON.stringify(budgetData));
-        updateUI();
-        updatePlannerBtn.textContent = 'تم التحديث ✔';
+        updateUI(); // تأكيد الحفظ وتحديث كامل للواجهة
+        updatePlannerBtn.textContent = 'تم الحفظ ✔';
         updatePlannerBtn.style.backgroundColor = '#10b981';
-        setTimeout(() => { updatePlannerBtn.textContent = 'تحديث الدخل'; updatePlannerBtn.style.backgroundColor = '#3b82f6'; }, 2000);
+        setTimeout(() => { updatePlannerBtn.textContent = 'حفظ التحديث'; updatePlannerBtn.style.backgroundColor = '#3b82f6'; }, 2000);
     });
 }
 
+// ==========================================
+// 6. أحداث الحذف والإضافة (Events)
+// ==========================================
 function deleteItem(index) { expenses.splice(index, 1); updateUI(); }
 function deletePlan(index) { buyPlans.splice(index, 1); localStorage.setItem('my_buy_plans', JSON.stringify(buyPlans)); updateUI(); }
 window.deleteSaving = function(index) { savingsLog.splice(index, 1); localStorage.setItem('my_savings_log', JSON.stringify(savingsLog)); updateUI(); };
@@ -349,9 +387,6 @@ window.addFundToPlan = function(index) {
     }
 };
 
-// ==========================================
-// 6. أحداث المستخدم
-// ==========================================
 if(addSavingForm) {
     addSavingForm.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -436,10 +471,8 @@ if (clearAllTimeBtn) {
     });
 }
 
-// التشغيل الأولي
 updateUI();
 
-// القائمة الجانبية للتجاوب
 const sideBarElement = document.getElementById('side-bar');
 if (sideBarShow && sideBarElement) {
     sideBarShow.addEventListener('click', (e) => { e.stopPropagation(); sideBarElement.classList.toggle('mobile-active'); });

@@ -49,7 +49,7 @@ header {
     -webkit-text-fill-color: transparent;
     display: inline-block;
     filter: drop-shadow(0 2px 12px rgba(17, 124, 67, 0.4));
-    line-height: 1.6; /* حل مشكلة قص الكلمة من الأعلى */
+    line-height: 1.6; 
     padding: 5px 0;
 }
 
@@ -107,7 +107,7 @@ header {
     justify-content: center;
     align-items: center;
     width: 100%;
-    padding-top: 15px; /* إبعاد العنوان عن الحافة العلوية */
+    padding-top: 15px; 
     height: 50px;
 }
 
@@ -251,19 +251,15 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin
     border-radius: 8px;
 }
 
-/* ====================================================
-   تحديد حجم الرسوم البيانية (لحل مشكلة الحجم الضخم)
-==================================================== */
 .chart-bx { 
     width: 100%; 
-    max-width: 320px; /* تصغير الرسم الدائري ليصبح متناسقاً */
+    max-width: 320px; 
     margin: 0 auto; 
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-/* ترك الرسم البياني للأعمدة في سكشن الشهر عريضاً كما هو */
 #sec-112 .chart-bx {
     max-width: 600px;
 }
@@ -299,24 +295,14 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin
     height: 100%;
     transition: width 0.8s ease-in-out, background-color 0.4s;
 }
-/* تنسيق شريط التمرير لقائمة جميع المصروفات */
-#all-expenses-list::-webkit-scrollbar {
-    width: 8px;
-}
-#all-expenses-list::-webkit-scrollbar-track {
-    background: var(--bg-card); 
-    border-radius: 8px;
-}
-#all-expenses-list::-webkit-scrollbar-thumb {
-    background: var(--bg-input); 
-    border-radius: 8px;
-}
-#all-expenses-list::-webkit-scrollbar-thumb:hover {
-    background: var(--accent); 
-}
+
+#all-expenses-list::-webkit-scrollbar { width: 8px; }
+#all-expenses-list::-webkit-scrollbar-track { background: var(--bg-card); border-radius: 8px; }
+#all-expenses-list::-webkit-scrollbar-thumb { background: var(--bg-input); border-radius: 8px; }
+#all-expenses-list::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
 /* ====================================================
-   Media Queries الشاملة (تفعيل الثلاث شرط عند 1800px وحفظ تصميم الـ ::before الأصلي)
+   Media Queries (1800px)
 ==================================================== */
 
 @media screen and (max-width: 1800px) {
@@ -329,21 +315,9 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin
         position: sticky !important;
     }
 
-    .info-cont {
-        width: 25% !important;
-        height: auto !important;
-        padding: 12px !important;
-    }
+    .info-cont { width: 25% !important; height: auto !important; padding: 12px !important; }
+    .side-icon { display: flex !important; align-items: center; justify-content: center; z-index: 2001; }
 
-    /* إظهار أيقونة الثلاث شرط من أول 1800 بكسل لمنع التداخل مع الـ info-cont */
-    .side-icon {
-        display: flex !important;
-        align-items: center;
-        justify-content: center;
-        z-index: 2001;
-    }
-
-    /* تصميم القائمة الجانبية المنسدلة (Drawer) */
     #side-bar {
         position: fixed !important;
         top: 0 !important;
@@ -365,25 +339,10 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin
         text-align: right !important;
     }
 
-    #side-bar.mobile-active {
-        left: 0 !important;
-    }
+    #side-bar.mobile-active { left: 0 !important; }
+    .side-bar-main-cont { width: 100% !important; text-align: center !important; margin-bottom: 15px; }
+    .section-group { flex-direction: column !important; height: auto !important; width: 100% !important; align-items: stretch !important; gap: 10px !important; }
 
-    .side-bar-main-cont {
-        width: 100% !important;
-        text-align: center !important;
-        margin-bottom: 15px;
-    }
-
-    .section-group {
-        flex-direction: column !important;
-        height: auto !important;
-        width: 100% !important;
-        align-items: stretch !important;
-        gap: 10px !important;
-    }
-
-    /* ضبط أبعاد الأقسام لتكون حوافه متساوية ومنظمة تماماً داخل القائمة */
     .side-section {
         width: 100% !important;
         max-width: 100% !important;
@@ -393,7 +352,6 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin
         box-sizing: border-box !important;
     }
 
-    /* إرجاع الـ ::before الدقيق والأصلي بشكله الهلالي وبنفس الخصائص الحرفية */
     .side-section::before {
         content: "";
         position: absolute;
@@ -408,122 +366,30 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin
         transition: transform 0.2s ease-in-out;
     }
 
-    .side-section.active::before {
-        transform: translateY(-50%) scale(1) !important;
-    }
-
-    .stats-grid {
-        flex-direction: row;
-    }
+    .side-section.active::before { transform: translateY(-50%) scale(1) !important; }
+    .stats-grid { flex-direction: row; }
 }
 
-/* --- شاشات 1280 بكسل وأقل --- */
-@media screen and (max-width: 1280px) {
-    .info-cont {
-        width: 35% !important;
-    }
-}
-
-/* --- شاشات 1024 بكسل وأقل --- */
-@media screen and (max-width: 1024px) {
-    .info-cont {
-        width: 65% !important;
-    }
-    .stats-grid {
-        flex-direction: column !important;
-        gap: 15px !important;
-    }
-}
-
-/* --- شاشات 740 بكسل وأقل (الهواتف المحمولة) --- */
+@media screen and (max-width: 1280px) { .info-cont { width: 35% !important; } }
+@media screen and (max-width: 1024px) { .info-cont { width: 65% !important; } .stats-grid { flex-direction: column !important; gap: 15px !important; } }
 @media screen and (max-width: 740px) {
-    body {
-        padding: 0 5px;
+    body { padding: 0 5px; }
+    header { padding: 10px !important; gap: 10px !important; }
+    .info-cont { width: 100% !important; padding: 10px !important; border-radius: 15px; }
+    .info-title { font-size: 0.95rem !important; text-align: center; }
+    .info-sub { font-size: 0.8rem !important; }
+    .exp-card { padding: 15px !important; border-radius: 10px !important; }
+    .exp-card h3 { font-size: 1.1rem !important; }
+    
+    #add-form, #add-plan-form, #monthly-save-form, #annual-save-form, #add-saving-form { flex-direction: column !important; gap: 10px !important; }
+    #add-form input, #add-form select, #add-form button, #add-plan-form input, #add-plan-form button, #monthly-save-form input, #monthly-save-form button, #annual-save-form input, #annual-save-form button, #add-saving-form input, #add-saving-form button {
+        width: 100% !important; min-width: 100% !important; box-sizing: border-box !important;
     }
 
-    header {
-        padding: 10px !important;
-        gap: 10px !important;
-    }
-
-    .info-cont {
-        width: 100% !important;
-        height: auto !important;
-        padding: 10px !important;
-        border-radius: 15px;
-    }
-
-    .info-title {
-        font-size: 0.95rem !important;
-        text-align: center;
-    }
-
-    .info-sub {
-        font-size: 0.8rem !important;
-    }
-
-    .exp-card {
-        padding: 15px !important;
-        border-radius: 10px !important;
-    }
-
-    .exp-card h3 {
-        font-size: 1.1rem !important;
-    }
-
-    #add-form, 
-    #add-plan-form, 
-    #monthly-save-form, 
-    #annual-save-form {
-        flex-direction: column !important;
-        gap: 10px !important;
-    }
-
-    #add-form input, 
-    #add-form select, 
-    #add-form button,
-    #add-plan-form input,
-    #add-plan-form button,
-    #monthly-save-form input,
-    #monthly-save-form button,
-    #annual-save-form input,
-    #annual-save-form button {
-        width: 100% !important;
-        min-width: 100% !important;
-        box-sizing: border-box !important;
-    }
-
-    .tot-box {
-        font-size: 1rem !important;
-        padding: 12px !important;
-        text-align: center;
-    }
-
-    .tot-box strong {
-        font-size: 1.3rem !important;
-        display: block;
-        margin-top: 5px;
-        margin-left: 0;
-    }
-
-    .exp-list li {
-        padding: 12px !important;
-        flex-direction: column !important;
-        align-items: flex-start !important;
-        gap: 8px !important;
-    }
-
-    .exp-list li > div:last-child {
-        width: 100% !important;
-        justify-content: space-between !important;
-    }
-
-    .chart-bx {
-        max-width: 100% !important;
-    }
-
-    #search-expenses {
-        font-size: 0.9rem !important;
-        padding: 10px !important;
-    }
+    .tot-box { font-size: 1rem !important; padding: 12px !important; text-align: center; }
+    .tot-box strong { font-size: 1.3rem !important; display: block; margin-top: 5px; margin-left: 0; }
+    .exp-list li { padding: 12px !important; flex-direction: column !important; align-items: flex-start !important; gap: 8px !important; }
+    .exp-list li > div:last-child { width: 100% !important; justify-content: space-between !important; }
+    .chart-bx { max-width: 100% !important; }
+    #search-expenses { font-size: 0.9rem !important; padding: 10px !important; }
 }
