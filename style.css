@@ -1,0 +1,529 @@
+:root {
+  --bg-dark: #18181b;
+  --bg-card: #27272a;
+  --bg-input: #3f3f46;
+  --text-main: #fafafa;
+  --text-muted: #a1a1aa;
+  --accent: #117c43;
+  --accent-hover: #005930;
+  --danger: #ef4444;
+  --border-color: #3f3f46;
+}
+
+body {
+    background-color: var(--bg-dark);
+    height: 100%;
+    margin: 0px;
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+    height: 145px;
+    margin: 0;
+    gap: 150px;
+    background-color: rgba(42, 42, 42, 0.85); 
+    backdrop-filter: blur(8px); 
+}
+
+.side-icon {
+    color: var(--text-muted);
+    font-size: 30px;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    margin-left: 10px;
+    display: none;
+}
+
+.brand-glow {
+    background: linear-gradient(135deg, var(--accent), #4ade80);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+    filter: drop-shadow(0 2px 12px rgba(17, 124, 67, 0.4));
+    line-height: 1.6; /* حل مشكلة قص الكلمة من الأعلى */
+    padding: 5px 0;
+}
+
+.info-cont {
+    background-color: var(--bg-input);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 22%;
+    border-radius: 20px;
+    flex-direction: column;
+    height: 120px;
+    backdrop-filter: blur(3px);
+}
+
+.info-title { color: var(--text-main); }
+.info-sub { color: var(--text-muted); }
+.edit-icon { cursor: pointer; }
+.edit-icon:hover {
+    background: linear-gradient(135deg, var(--accent-hover), #4ade80);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.username-input {
+    background-color: var(--bg-input);
+    color: var(--text-main);
+    border: 1px solid var(--accent);
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 1rem;
+    outline: none;
+}
+
+#side-bar {
+    position: absolute;
+    top: 0;
+    z-index: 999;
+    width: 75%;
+    height: auto;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    border-radius: 0px 0px 20px 20px;
+    padding: 3px;
+    transition: all 0.70s ease-in-out;
+    margin-top: 0px;
+    flex-direction: column;
+}
+
+.side-bar-main-cont {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding-top: 15px; /* إبعاد العنوان عن الحافة العلوية */
+    height: 50px;
+}
+
+.section-group {
+    display: flex;
+    flex-direction: row;
+    height: 70px;
+    justify-content: flex-end;
+}
+
+.side-section {
+    position: relative;
+    color: var(--text-muted);
+    padding: 1px;
+    cursor: pointer;
+    margin: 5px;
+    width: 225px;
+    transition: 0.3s ease;
+}
+
+.side-section::before {
+    content: "";
+    position: absolute;
+    right: 0px;
+    top: 50%;
+    width: 20px; 
+    height: 62px; 
+    border-radius: 50%; 
+    background-color: transparent;
+    box-shadow: 3px 0 0 0 var(--accent); 
+    transform: translateY(-50%) scale(0);
+    transition: transform 0.2s ease-in-out;
+}
+
+.side-section.active::before {
+    transform: translateY(-50%) scale(1);
+}
+
+.side-section.active {
+    background-color: rgba(17, 124, 67, 0.2); 
+    color: var(--text-main);
+    border-radius: 10px;
+    backdrop-filter: blur(5px);
+}
+
+.side-section:hover {
+    background-color: var(--border-color);
+    border-radius: 10px;
+}
+
+.content-sec {
+    display: none !important;
+}
+
+.content-sec.active {
+    display: flex !important;
+    flex-direction: column; 
+    gap: 20px;
+    max-width: 900px;
+    margin: 30px auto; 
+    padding: 0 15px;
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.exp-card {
+    background-color: var(--bg-card);
+    border-radius: 12px;
+    padding: 25px;
+    color: var(--text-main);
+    width: 100%;
+    box-sizing: border-box; 
+    border: 1px solid #333;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.txt-c { text-align: center; }
+.exp-card h3 { color: var(--accent); margin-top: 0; margin-bottom: 20px; font-size: 1.2rem;}
+
+#add-form {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+#add-form input, #add-form select {
+    background-color: var(--bg-input);
+    border: 1px solid #555;
+    color: var(--text-main);
+    padding: 12px;
+    border-radius: 8px;
+    outline: none;
+    flex: 1;
+    min-width: 140px;
+}
+
+#add-form input:focus, #add-form select:focus { border-color: var(--accent); }
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
+.btn {
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s;
+    color: #fff;
+}
+
+.add-btn { background-color: var(--accent); }
+.add-btn:hover { background-color: var(--accent-hover); }
+.clr-btn { background-color: #8b0000; font-size: 0.9rem; }
+.clr-btn:hover { background-color: #5a0000; }
+.del-item { background: none; color: var(--danger); border: none; cursor: pointer; font-size: 1.2rem; }
+
+.tot-box {
+    background-color: var(--bg-input);
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    border-bottom: 4px solid var(--accent);
+}
+.tot-box strong { color: var(--accent); font-size: 1.6rem; margin-left: 5px; }
+
+.list-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.exp-list { list-style: none; padding: 0; margin: 0; }
+.exp-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--bg-input);
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+}
+
+/* ====================================================
+   تحديد حجم الرسوم البيانية (لحل مشكلة الحجم الضخم)
+==================================================== */
+.chart-bx { 
+    width: 100%; 
+    max-width: 320px; /* تصغير الرسم الدائري ليصبح متناسقاً */
+    margin: 0 auto; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ترك الرسم البياني للأعمدة في سكشن الشهر عريضاً كما هو */
+#sec-112 .chart-bx {
+    max-width: 600px;
+}
+
+.stats-grid { 
+    display: flex; 
+    gap: 20px; 
+    width: 100%;
+}
+
+.stat-card { 
+    flex: 1; 
+    text-align: center; 
+    padding: 25px;
+}
+
+.txt-muted { color: var(--text-muted); margin: 0 0 10px 0; font-weight: normal; font-size: 1rem; }
+.stat-card p { font-size: 1.8rem; color: var(--text-main); margin: 0; font-weight: bold; }
+.txt-accent { color: var(--accent); }
+
+.budget-track {
+    background-color: var(--bg-input);
+    border-radius: 12px;
+    height: 28px;
+    width: 100%;
+    overflow: hidden;
+    margin-top: 15px;
+    border: 1px solid #555;
+}
+.budget-fill {
+    width: 0%;
+    background-color: var(--accent);
+    height: 100%;
+    transition: width 0.8s ease-in-out, background-color 0.4s;
+}
+/* تنسيق شريط التمرير لقائمة جميع المصروفات */
+#all-expenses-list::-webkit-scrollbar {
+    width: 8px;
+}
+#all-expenses-list::-webkit-scrollbar-track {
+    background: var(--bg-card); 
+    border-radius: 8px;
+}
+#all-expenses-list::-webkit-scrollbar-thumb {
+    background: var(--bg-input); 
+    border-radius: 8px;
+}
+#all-expenses-list::-webkit-scrollbar-thumb:hover {
+    background: var(--accent); 
+}
+
+/* ====================================================
+   Media Queries الشاملة (تفعيل الثلاث شرط عند 1800px وحفظ تصميم الـ ::before الأصلي)
+==================================================== */
+
+@media screen and (max-width: 1800px) {
+    header {
+        height: auto !important;
+        padding: 15px 20px !important;
+        gap: 20px !important;
+        flex-wrap: wrap !important;
+        justify-content: space-between !important;
+        position: sticky !important;
+    }
+
+    .info-cont {
+        width: 25% !important;
+        height: auto !important;
+        padding: 12px !important;
+    }
+
+    /* إظهار أيقونة الثلاث شرط من أول 1800 بكسل لمنع التداخل مع الـ info-cont */
+    .side-icon {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        z-index: 2001;
+    }
+
+    /* تصميم القائمة الجانبية المنسدلة (Drawer) */
+    #side-bar {
+        position: fixed !important;
+        top: 0 !important;
+        left: -100% !important;
+        width: 300px !important;
+        max-width: 80% !important;
+        height: 100vh !important;
+        background-color: var(--bg-card) !important;
+        box-shadow: 5px 0 25px rgba(0,0,0,0.8);
+        z-index: 2500;
+        transition: left 0.4s ease-in-out !important;
+        border-radius: 0 20px 20px 0 !important;
+        overflow-y: auto;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        padding: 25px 15px !important;
+        margin-top: 0 !important;
+        text-align: right !important;
+    }
+
+    #side-bar.mobile-active {
+        left: 0 !important;
+    }
+
+    .side-bar-main-cont {
+        width: 100% !important;
+        text-align: center !important;
+        margin-bottom: 15px;
+    }
+
+    .section-group {
+        flex-direction: column !important;
+        height: auto !important;
+        width: 100% !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+    }
+
+    /* ضبط أبعاد الأقسام لتكون حوافه متساوية ومنظمة تماماً داخل القائمة */
+    .side-section {
+        width: 100% !important;
+        max-width: 100% !important;
+        text-align: right !important;
+        padding: 10px 15px !important;
+        margin: 5px 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    /* إرجاع الـ ::before الدقيق والأصلي بشكله الهلالي وبنفس الخصائص الحرفية */
+    .side-section::before {
+        content: "";
+        position: absolute;
+        right: 0px;
+        top: 50%;
+        width: 20px; 
+        height: 80px; 
+        border-radius: 50%; 
+        background-color: transparent;
+        box-shadow: 3px 0 0 0 var(--accent); 
+        transform: translateY(-50%) scale(0);
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .side-section.active::before {
+        transform: translateY(-50%) scale(1) !important;
+    }
+
+    .stats-grid {
+        flex-direction: row;
+    }
+}
+
+/* --- شاشات 1280 بكسل وأقل --- */
+@media screen and (max-width: 1280px) {
+    .info-cont {
+        width: 35% !important;
+    }
+}
+
+/* --- شاشات 1024 بكسل وأقل --- */
+@media screen and (max-width: 1024px) {
+    .info-cont {
+        width: 65% !important;
+    }
+    .stats-grid {
+        flex-direction: column !important;
+        gap: 15px !important;
+    }
+}
+
+/* --- شاشات 740 بكسل وأقل (الهواتف المحمولة) --- */
+@media screen and (max-width: 740px) {
+    body {
+        padding: 0 5px;
+    }
+
+    header {
+        padding: 10px !important;
+        gap: 10px !important;
+    }
+
+    .info-cont {
+        width: 100% !important;
+        height: auto !important;
+        padding: 10px !important;
+        border-radius: 15px;
+    }
+
+    .info-title {
+        font-size: 0.95rem !important;
+        text-align: center;
+    }
+
+    .info-sub {
+        font-size: 0.8rem !important;
+    }
+
+    .exp-card {
+        padding: 15px !important;
+        border-radius: 10px !important;
+    }
+
+    .exp-card h3 {
+        font-size: 1.1rem !important;
+    }
+
+    #add-form, 
+    #add-plan-form, 
+    #monthly-save-form, 
+    #annual-save-form {
+        flex-direction: column !important;
+        gap: 10px !important;
+    }
+
+    #add-form input, 
+    #add-form select, 
+    #add-form button,
+    #add-plan-form input,
+    #add-plan-form button,
+    #monthly-save-form input,
+    #monthly-save-form button,
+    #annual-save-form input,
+    #annual-save-form button {
+        width: 100% !important;
+        min-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .tot-box {
+        font-size: 1rem !important;
+        padding: 12px !important;
+        text-align: center;
+    }
+
+    .tot-box strong {
+        font-size: 1.3rem !important;
+        display: block;
+        margin-top: 5px;
+        margin-left: 0;
+    }
+
+    .exp-list li {
+        padding: 12px !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 8px !important;
+    }
+
+    .exp-list li > div:last-child {
+        width: 100% !important;
+        justify-content: space-between !important;
+    }
+
+    .chart-bx {
+        max-width: 100% !important;
+    }
+
+    #search-expenses {
+        font-size: 0.9rem !important;
+        padding: 10px !important;
+    }
+}

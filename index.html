@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<!-- --------------------------------- -->
+<html lang="ar" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Finance Manager | PFM</title>
+<!-- ---------------style-links------------------ -->
+    <link rel="stylesheet" href="style.css">
+    <!-- -------------------------- -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css"
+    integrity="sha512-QeR2VH+lsBE5LSAe1Q5EnTBbe7XTBubt8dG93Y7gidSgdMCr8nVqKcfKAMyN96SV8KDbZVTDXChatu5G2KQGzg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer">
+    <!-- ---------------------------- -->
+<!-- --------------------------------- -->
+</head>
+<!-- --------------------------------- -->
+<body>
+<!-- ---------------header------------------------ -->
+<header>
+    <div class="side-icon">
+    <i id="side-icon" class="fa-solid fa-list"></i>
+    </div>
+    <br>
+    <div class="info-cont">
+        <h2 class="info-title">
+            <span class="edit-icon"><i class="fa-solid fa-pen-to-square" id="edit-user"></i></span>
+            <span class="brand-glow" id="user">
+           عزيزي 
+        </span> اهلا بك , يا  
+            <i class="fa-regular fa-circle-user user-icon"></i></h2>
+        <p class="info-sub">Personal Finance Manager | (PFM)</p>
+    </div>
+<div id="side-bar">
+    <div class="side-bar-main-cont">
+        <h1 class="brand-glow">
+            قائمه لوحه البيانات
+        </h1>
+    </div>
+    <div class="section-group">
+    <section class="side-section" id="sec-11" data-target="week-expenses">
+        <span class="side-sec-title">
+          <h3> مصروفات الاسبوع
+          </h3></span>
+    </section>
+
+    <section class="side-section" id="sec-12" data-target="sec-112">
+        <span class="side-sec-title">
+          <h3> مصروفات الشهر
+        </h3></span>
+    </section> 
+
+    <section class="side-section" id="sec-13" data-target="sec-113">
+        <span class="side-sec-title">
+          <h3> خطط الشراء
+        </h3></span>
+    </section>
+
+    <section class="side-section" id="sec-14" data-target="sec-114">
+        <span class="side-sec-title">
+            <h3> خطط التحويش الشهري
+        </h3></span>
+    </section>
+    <section class="side-section" id="sec-15" data-target="sec-115">
+        <span class="side-sec-title">
+           <h3> خطط التحويش السنوي
+        </h3></span>
+    </section>
+    <section class="side-section" id="sec-16" data-target="sec-116">
+        <span class="side-sec-title">
+           <h3> عرض جميع المصروفات
+        </h3></span>
+    </section>
+    </div>
+</div>
+</header>
+<!-- ---------------main-contant------------------ -->
+<main>
+<section id="week-expenses" class="content-sec active">
+    <div class="exp-card">
+        <h3 class="txt-c">إضافة مصروف جديد</h3>
+        <form id="add-form">
+            <input type="text" id="exp-title" placeholder="اسم المصروف" required>
+            <input type="number" id="exp-amount" placeholder="المبلغ" required>
+            <select id="exp-category">
+                <option value="أكل وشرب">أكل وشرب</option>
+                <option value="مواصلات">مواصلات</option>
+                <option value="ترفيه">ترفيه</option>
+                <option value="مشتريات">مشتريات</option>
+                <option value="أخرى">أخرى</option>
+            </select>
+            <button type="submit" class="btn add-btn">إضافة</button>
+        </form>
+        <div class="tot-box txt-c">
+            صرفت هذا الأسبوع: <strong id="today-total">0</strong> جنيه
+        </div>
+    </div>
+    <div class="exp-card">
+        <h3 class="txt-c">توزيع مصروفات الأسبوع الحالي</h3>
+        <div class="chart-bx">
+            <canvas id="weeklyChart"></canvas>
+        </div>
+    </div>
+    <div class="exp-card">
+        <div class="list-head">
+            <h3>سجل الأسبوع الحالي</h3>
+            <button id="clear-all-btn" class="btn clr-btn">مسح سجل الأسبوع</button>
+        </div>
+        <ul id="today-list" class="exp-list"></ul>
+    </div>
+</section>
+
+<section id="sec-112" class="content-sec">
+    <div class="stats-grid">
+        <div class="exp-card stat-card">
+            <h4 class="txt-muted">إجمالي مصروفات الشهر</h4>
+            <p><strong id="month-total" class="txt-accent">0</strong> ج</p>
+        </div>
+        <div class="exp-card stat-card">
+            <h4 class="txt-muted">أعلى فئة صرف (شهرياً)</h4>
+            <p id="top-category">لا يوجد</p>
+        </div>
+    </div>
+    <div class="exp-card">
+        <h3>تتبع الميزانية الشهرية (الحد الأقصى: 5000 ج)</h3>
+        <div class="budget-track">
+            <div id="budget-bar" class="budget-fill"></div>
+        </div>
+    </div>
+    <div class="exp-card">
+        <h3 class="txt-c">مقارنة المصروفات بأسابيع الشهر</h3>
+        <div class="chart-bx" style="max-width: 600px;">
+            <canvas id="monthlyChart"></canvas>
+        </div>
+    </div>
+</section>
+
+<section id="sec-113" class="content-sec">
+    <div class="exp-card">
+        <h3 class="txt-c">إضافة خطة شراء (هدف)</h3>
+        <form id="add-plan-form" style="display: flex; gap: 15px; flex-wrap: wrap;">
+            <input type="text" id="plan-title" placeholder="اسم الحاجة (مثال: شاشة جديدة)" required style="background: var(--bg-input); border: 1px solid #555; color: white; padding: 10px; border-radius: 8px; flex: 1; min-width: 150px;">
+            <input type="number" id="plan-price" placeholder="السعر المطلوب" required style="background: var(--bg-input); border: 1px solid #555; color: white; padding: 10px; border-radius: 8px; flex: 1; min-width: 150px;">
+            <button type="submit" class="btn add-btn" style="background-color: #3b82f6;">إضافة الخطة</button>
+        </form>
+    </div>
+    <div class="exp-card">
+        <div class="list-head">
+            <h3>خطط الشراء الحالية وتجميع المبالغ</h3>
+        </div>
+        <ul id="plans-list" class="exp-list">
+        </ul>
+    </div>
+</section>
+
+<!-- سكشن 4 المطور: التخطيط والتحويش الشهري -->
+<section id="sec-114" class="content-sec">
+    <!-- المستشار المالي -->
+    <div class="exp-card">
+        <h3 class="txt-c" style="color: #3b82f6;">المستشار المالي وتخطيط الدخل</h3>
+        
+        <!-- إدخال وتحديث الدخل من هنا مباشرة -->
+        <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 20px;">
+            <input type="number" id="planner-income" placeholder="سجل دخلك الشهري هنا (القبض)" required style="background: var(--bg-input); border: 1px solid #555; color: white; padding: 10px; border-radius: 8px; flex: 1; min-width: 150px;">
+            <button id="update-planner-btn" class="btn" style="background-color: #3b82f6;">تحديث الدخل</button>
+        </div>
+
+        <div class="tot-box txt-c" style="background-color: rgba(59, 130, 246, 0.1); border-bottom-color: #3b82f6; margin-bottom: 20px;">
+            الدخل الشهري المسجل: <strong id="planner-display-income" style="color: #3b82f6;">0</strong> ج
+        </div>
+
+        <!-- نصائح وتوصيات الخبراء -->
+        <div class="stats-grid" style="margin-bottom: 25px;">
+            <div class="stat-card" style="background: var(--bg-input); padding: 15px; border-radius: 8px; text-align: right;">
+                <h4 style="color: #10b981; margin: 0 0 10px 0;"><i class="fa-solid fa-lightbulb"></i> اقتراح التوزيع (80/20)</h4>
+                <p style="font-size: 1.1rem; margin: 5px 0;">مصروفات (80%): <strong id="rec-spend">0</strong> ج</p>
+                <p style="font-size: 1.1rem; margin: 0;">تحويش (20%): <strong id="rec-save">0</strong> ج</p>
+            </div>
+            <div class="stat-card" style="background: var(--bg-input); padding: 15px; border-radius: 8px; text-align: right;">
+                <h4 style="color: #f59e0b; margin: 0 0 10px 0;"><i class="fa-solid fa-chart-line"></i> نصيحة استثمارية</h4>
+                <p style="font-size: 0.95rem; margin: 0 0 10px 0; color: #ccc;">لضمان مستقبل أفضل، يُنصح ألا يقل استثمارك عن 10% من الدخل.</p>
+                <p style="font-size: 1.1rem; margin: 0;">الحد الأدنى للاستثمار: <strong id="rec-invest">0</strong> ج</p>
+            </div>
+        </div>
+
+        <!-- شريط تحديد النسبة المخصصة -->
+        <div style="background: var(--bg-dark); padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #444;">
+            <h4 style="margin-top: 0; text-align: center;">حدد نسبة التحويش اللي تناسبك</h4>
+            <div style="display: flex; gap: 15px; align-items: center; justify-content: center; margin: 15px 0;">
+                <input type="range" id="custom-save-range" min="0" max="100" value="20" style="flex: 1; cursor: pointer; accent-color: #3b82f6;">
+                <span id="custom-save-percent" style="font-weight: bold; color: #3b82f6; font-size: 1.5rem; min-width: 60px; text-align: center;">20%</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; flex-wrap: wrap; text-align: center;">
+                <div style="flex: 1;">
+                    <p style="margin: 0; font-size: 0.9rem; color: #aaa;">المبلغ المخصص للتحويش</p>
+                    <p style="margin: 5px 0 0 0; font-size: 1.2rem; font-weight: bold; color: #10b981;"><span id="custom-save-amount">0</span> ج</p>
+                </div>
+                <div style="flex: 1;">
+                    <p style="margin: 0; font-size: 0.9rem; color: #aaa;">المتبقي للمصاريف</p>
+                    <p style="margin: 5px 0 0 0; font-size: 1.2rem; font-weight: bold; color: #ef4444;"><span id="custom-spend-amount">0</span> ج</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- الرسم البياني للتخطيط -->
+        <h4 class="txt-c">مخطط التوزيع المرئي</h4>
+        <div class="chart-bx" style="max-width: 300px;">
+            <canvas id="plannerChart"></canvas>
+        </div>
+    </div>
+
+    <!-- كارت تسجيل المدخرات (الحصالة الفعيلة) -->
+    <div class="exp-card">
+        <h3 class="txt-c" style="color: #10b981;">إضافة مبلغ للحصالة (ادخار فعلي)</h3>
+        <form id="add-saving-form" style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 15px;">
+            <input type="number" id="save-amount" placeholder="المبلغ (مثال: 500)" required style="background: var(--bg-input); border: 1px solid #555; color: white; padding: 10px; border-radius: 8px; flex: 1; min-width: 120px;">
+            <input type="text" id="save-note" placeholder="ملاحظة (اختياري)" style="background: var(--bg-input); border: 1px solid #555; color: white; padding: 10px; border-radius: 8px; flex: 2; min-width: 150px;">
+            <button type="submit" class="btn" style="background-color: #10b981;">ادخار</button>
+        </form>
+        
+        <div class="tot-box txt-c" style="margin-top: 20px; background-color: rgba(16, 185, 129, 0.1); border-bottom-color: #10b981;">
+            ما تم ادخاره فعلياً هذا الشهر: <strong id="month-saved-total" style="color: #10b981;">0</strong> ج
+        </div>
+    </div>
+
+    <div class="exp-card">
+        <h3>سجل ادخارات الشهر الحالي</h3>
+        <ul id="month-savings-list" class="exp-list"></ul>
+    </div>
+</section>
+
+<section id="sec-115" class="content-sec">
+    <div class="exp-card">
+        <h3 class="txt-c">خطة التحويش السنوي (نظرة مستقبلية)</h3>
+        <div class="tot-box txt-c" style="background-color: rgba(139, 92, 246, 0.1); border-bottom-color: #8b5cf6;">
+            إجمالي الدخل السنوي المتوقع: <strong id="display-annual-income" style="color: #8b5cf6;">0</strong> جنيه
+        </div>
+        <form id="annual-save-form" style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 20px;">
+            <input type="number" id="annual-save-target" placeholder="هدفك السنوي للتحويش (مثال: 20000 ج)" required style="background: var(--bg-input); border: 1px solid #555; color: white; padding: 10px; border-radius: 8px; flex: 1; min-width: 150px;">
+            <button type="submit" class="btn" style="background-color: #8b5cf6;">تحديث الخطة</button>
+        </form>
+        <div style="margin-top: 20px; padding: 15px; background: var(--bg-dark); border-radius: 8px;">
+            <p style="margin: 0 0 10px 0;">عشان تحقق الهدف ده، لازم تحوش شهرياً: <span id="req-monthly-save" style="font-weight: bold; color: #8b5cf6;">0</span> ج</p>
+            <p style="margin: 0;">أو بمعدل أسبوعي: <span id="req-weekly-save" style="font-weight: bold; color: #8b5cf6;">0</span> ج</p>
+        </div>
+    </div>
+
+    <div class="exp-card">
+        <div class="tot-box txt-c" style="margin-bottom: 20px; background-color: rgba(16, 185, 129, 0.1); border-bottom-color: #10b981;">
+            ما تم ادخاره فعلياً هذه السنة: <strong id="year-saved-total" style="color: #10b981;">0</strong> ج
+        </div>
+        <h3>سجل ادخارات السنة الحالية</h3>
+        <ul id="year-savings-list" class="exp-list"></ul>
+    </div>
+</section>
+
+<section id="sec-116" class="content-sec active">
+    <div class="stats-grid">
+        <div class="exp-card stat-card">
+            <h4 class="txt-muted">إجمالي المصروفات</h4>
+            <p><strong id="all-time-total" class="txt-accent">0</strong> ج</p>
+        </div>
+        <div class="exp-card stat-card">
+            <h4 class="txt-muted">إجمالي المدخرات (الحصالة)</h4>
+            <p><strong id="all-time-saved" style="color: #10b981;">0</strong> ج</p>
+        </div>
+        <div class="exp-card stat-card">
+            <h4 class="txt-muted">إجمالي العمليات</h4>
+            <p><strong id="all-time-count" style="color: #3b82f6;">0</strong></p>
+        </div>
+    </div>
+
+    <div class="exp-card">
+        <div class="list-head" style="flex-wrap: wrap; gap: 15px;">
+            <h3 style="margin: 0;">سجل المصروفات الكامل</h3>
+            <button id="clear-all-time-btn" class="btn clr-btn">مسح السجل بالكامل ⚠</button>
+        </div>
+        <input type="text" id="search-expenses" placeholder="ابحث باسم المصروف أو الفئة..." style="width: 100%; box-sizing: border-box; background: var(--bg-input); border: 1px solid #555; color: white; padding: 12px; border-radius: 8px; margin-bottom: 20px; outline: none; font-size: 1rem;">
+        <ul id="all-expenses-list" class="exp-list" style="max-height: 450px; overflow-y: auto; padding-right: 5px;"></ul>
+    </div>
+</section>
+</main>
+<!-- -----------------Scripts-link---------------- -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script src="script.js"></script>
+<!-- --------------------------------- -->
+</body>
+<!-- --------------------------------- -->
+</html>
